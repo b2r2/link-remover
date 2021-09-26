@@ -17,9 +17,9 @@ import (
 type bot struct {
 	log *logrus.Logger
 	bot *tele.Bot
-	m   chan message
 	rg  *regexp.Regexp
 	sync.RWMutex
+	m            chan message
 	removedLinks []user
 }
 
