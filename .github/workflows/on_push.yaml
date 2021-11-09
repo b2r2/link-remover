@@ -1,0 +1,25 @@
+name: Publish on Docker Hub and Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_and_pub:
+    runs-on: [ubuntu-latest]
+    env:
+      LOGIN: ${{ secret.DOCKER_LOGIN }}
+      NAME: ${{ secret.DOCKER_NAME }}
+    steps:
+      - name: Login to Docker
+        run:  echo ${{ secrets.DOCKER_PWD }} | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+      - users: actions/checkout@master
+      - name: Push image to docker
+        run: docker push $LOGIN/$NAME:${GITHUB_RED:11}
+
+#  deploy:
+#    needs: [build_and_pub]
+#    runs-on: [ubuntu-latest]
+#    steps:
+#      - name: Set tag to env
+#        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
