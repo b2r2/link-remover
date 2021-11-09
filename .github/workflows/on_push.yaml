@@ -8,13 +8,12 @@ jobs:
   build_and_pub:
     runs-on: [ubuntu-latest]
     env:
-      LOGIN: ${{ secret.DOCKER_LOGIN }}
-      NAME: ${{ secret.DOCKER_NAME }}
+      LOGIN: ${{ secrets.DOCKER_LOGIN }}
+      NAME: ${{ secrets.DOCKER_NAME }}
     steps:
       - name: Login to Docker
       - uses: actions/checkout@master
-        run:  |
-        echo ${{ secrets.DOCKER_PWD }} docker login -u $LOGIN --password-stdin
+        run: echo ${{ secrets.DOCKER_PWD }} | docker login -u $LOGIN --password-stdin
       - name: Build image
         run: docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f Dockerfile .
       - name: Push image to docker
