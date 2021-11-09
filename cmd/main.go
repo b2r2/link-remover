@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
+	"log"
+	"os/signal"
+	"syscall"
+
 	"github.com/b2r2/link-remover/internal/app"
 	"github.com/b2r2/link-remover/internal/config"
 	"github.com/sirupsen/logrus"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 
 	cfg := config.Get()
 
-	bot, err := app.New(&logrus.Logger{Out: os.Stderr}, cfg.GetToken())
+	bot, err := app.New(logrus.New(), cfg.GetToken())
 	if err != nil {
 		log.Fatal("err start new bot", err)
 	}

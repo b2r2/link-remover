@@ -33,6 +33,8 @@ type message struct {
 	url string
 }
 
+const domain = "nuancesprog"
+
 func New(log *logrus.Logger, t string) (*bot, error) {
 	b, err := tele.NewBot(tele.Settings{
 		Token:  t,
@@ -43,14 +45,7 @@ func New(log *logrus.Logger, t string) (*bot, error) {
 		return nil, err
 	}
 
-	//r, err := regexp.Compile(`(?:(?:https?|ftp):)?[\w\-?=%.]+\.[\w\-?=%.]+`)
-	//if err != nil {
-	//	return nil, err
-	//}
-
-	r := xurls.Relaxed()
-
-	return &bot{bot: b, log: log, m: make(chan message, 100), rg: r, removedLinks: make([]user, 0, 10_000)}, nil
+	return &bot{bot: b, log: log, m: make(chan message, 100), rg: xurls.Relaxed(), removedLinks: make([]user, 0, 10_000)}, nil
 }
 
 func (b *bot) Start(ctx context.Context) {
@@ -85,6 +80,7 @@ func (b *bot) Remover(ctx context.Context) {
 				}
 
 				b.RLock()
+				b.log.Println(u)
 				b.removedLinks = append(b.removedLinks, u)
 				b.RUnlock()
 			}
@@ -102,7 +98,7 @@ func (b *bot) Stop() {
 
 func (b *bot) checkMessage(c tele.Context) {
 	m := c.Message()
-	if m.Chat.Username != "nuancesprog" || m.ReplyTo.Chat.Username != "nuancesprog" {
+	if m.Chat.Username != domain || m.ReplyTo.Chat.Username != domain {
 		if len(b.rg.FindAllString(m.Text, -1)) > 0 {
 			b.push(m, m.Text)
 		}
