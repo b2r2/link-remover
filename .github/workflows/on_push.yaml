@@ -35,7 +35,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
           secrets: |
-            "token=${{ secrets.TOKEN_DEV }}"
+            "TOKEN=${{ secrets.TOKEN_DEV }}"
 
 #on:
 #  release:
