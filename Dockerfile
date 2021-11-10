@@ -15,4 +15,7 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 WORKDIR /usr/local/app
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
+ARG TOKEN=local
+ENV TOKEN ${TOKEN}
+
 CMD /bin/link_remover_tg_bot

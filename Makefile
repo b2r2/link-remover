@@ -1,15 +1,11 @@
 BIN := "./bin/link_remover_tg_bot"
-
 IMAGE := "link_remover_tg_bot:dev"
 
-build_ubuntu:
-	GOOS=linux GOARCH=amd64 go build -o ${BIN} -v cmd/main.go
 
 build:
-	docker build -t $(IMAGE) -f Dockerfile .
+	docker build -t $(IMAGE) --build-arg TOKEN='455278361:AAFSYcbmNvtshujXKU8oxjIxh3XxPyc_pvo' -f Dockerfile .
 
 run:
-	go run -race cmd/main.go
+	docker run $(IMAGE)
 
-
-PHONY: build build_ubuntu run
+PHONY: build run

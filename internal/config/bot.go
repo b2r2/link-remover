@@ -1,12 +1,18 @@
 package config
 
+import (
+	"fmt"
+
+	"github.com/b2r2/link-remover/pkg"
+)
+
 type bot struct {
 	token string
 }
 
 func newBot() *bot {
+	fmt.Println("token:", pkg.GetEnv("TOKEN", ""))
 	return &bot{
-		token: "2022598237:AAETE8MNx4qQ71CdsaWtYtvaq0UVyzHBqsw",
-		//token: "455278361:AAFSYcbmNvtshujXKU8oxjIxh3XxPyc_pvo", //debug
+		token: pkg.GetEnv("TOKEN", ""),
 	}
 }
