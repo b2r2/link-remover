@@ -14,8 +14,11 @@ FROM alpine:3.14 as link_remover_tg_bot
 
 RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g' /etc/apk/repositories && apk add ca-certificates --no-cache
 
+RUN pip install pipenv && pipenv sync
+
 RUN --mount=type=secret,id=token \
     export TOKEN=$(cat /run/secrets/token) && \
+    python genenv.py && \
     echo $TOKEN
 
 WORKDIR /usr/local/app
