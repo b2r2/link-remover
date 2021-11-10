@@ -10,16 +10,15 @@ jobs:
     env:
       LOGIN: ${{ secrets.DOCKER_LOGIN }}
       NAME: ${{ secrets.DOCKER_NAME }}
+      TOKEN: ${{ secrets.TOKEN_DEV }}
     steps:
       - name: Login to Docker
         run: echo ${{ secrets.DOCKER_PWD }} | docker login -u $LOGIN --password-stdin
       - uses: actions/checkout@master
-      - name: Build and push image
-      - uses: docker/build-push-action@v2
-        with:
-          context: .
-          secrets: |
-            "TOKEN=${{ secrets.TOKEN_DEV }}"
+      - name: Build image
+        run: docker build --secret id=TOKEN,env=TOKEN -t $LOGIN/$NAME:${GITHUB_REF:11} -f Dockerfile .
+      - name: Push image to docker
+        run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
 
 #  deploy:
 #    needs: [build_and_pub]
