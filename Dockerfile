@@ -23,6 +23,4 @@ RUN --mount=type=secret,id=TOKEN \
 WORKDIR /usr/local/app
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
-ENTRYPOINT ["echo", "$TOKEN"]
-
 CMD /bin/link_remover_tg_bot
