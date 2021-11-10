@@ -3,7 +3,7 @@ IMAGE := "link_remover_tg_bot:dev"
 
 
 build:
-	docker build -t $(IMAGE) --build-arg TOKEN='455278361:AAFSYcbmNvtshujXKU8oxjIxh3XxPyc_pvo' -f Dockerfile .
+	docker build -t $(IMAGE) --secret id=TOKEN,src=secret.env -f Dockerfile .
 
 run:
 	docker run $(IMAGE)
