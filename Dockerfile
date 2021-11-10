@@ -14,12 +14,12 @@ FROM alpine:3.14 as link_remover_tg_bot
 
 RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g' /etc/apk/repositories && apk add ca-certificates --no-cache
 
-ARG TOKEN
+ARG token_arg
 
 RUN --mount=type=secret,id=token \
     export TOKEN=$(cat /run/secrets/token)
 
-ENV TOKEN ${TOKEN}
+ENV TOKEN ${token_arg}
 
 WORKDIR /usr/local/app
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
