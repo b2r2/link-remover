@@ -58,7 +58,7 @@ jobs:
 #        run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
 
 #  deploy:
-#    needs: [build_and_pub]
+#    needs: [docker]
 #    runs-on: [ubuntu-latest]
 #    steps:
 #      - name: Set tag to env
