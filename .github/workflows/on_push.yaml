@@ -34,8 +34,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
-          secrets: |
-            "TOKEN=${{ secrets.TOKEN_DEV }}"
+          secrets: "TOKEN=${{ secrets.TOKEN_DEV }}"
 
 #on:
 #  release:
