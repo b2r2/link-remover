@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.2
 FROM golang:1.17.1-alpine3.14 as build
 
 RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g' /etc/apk/repositories && apk add git --no-cache
