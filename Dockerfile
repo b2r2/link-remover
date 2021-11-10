@@ -19,7 +19,7 @@ ARG TOKEN
 RUN --mount=type=secret,id=TOKEN \
     export TOKEN=$(cat /run/secrets/TOKEN)
 
-ENV TOKEN=$TOKEN
+ENV TOKEN {$TOKEN}
 
 WORKDIR /usr/local/app
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
