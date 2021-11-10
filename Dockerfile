@@ -8,15 +8,16 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
+RUN --mount=type=secret,id=TOKEN \
+    export TOKEN=$(cat /run/secrets/TOKEN)
+
 RUN go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
 FROM alpine:3.14 as link_remover_tg_bot
 
 RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g' /etc/apk/repositories && apk add ca-certificates --no-cache
 
-ARG TOKEN
-
-RUN --mount=type=secret,id=TOKEN,env=$TOKEN \
+RUN --mount=type=secret,id=TOKEN \
     export TOKEN=$(cat /run/secrets/TOKEN)
 
 WORKDIR /usr/local/app
