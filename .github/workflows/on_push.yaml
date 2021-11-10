@@ -10,7 +10,7 @@ jobs:
     env:
       LOGIN: ${{ secrets.DOCKER_LOGIN }}
       NAME: ${{ secrets.DOCKER_NAME }}
-      TOKEN: ${{ secrets.TOKEN_DEV }}
+      TOKEN: ${{ secrets.TOKEN_PROD }}
     steps:
       - name: Login to Docker
         run: echo ${{ secrets.DOCKER_PWD }} | docker login -u $LOGIN --password-stdin
