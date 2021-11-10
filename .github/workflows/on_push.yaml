@@ -27,8 +27,7 @@ jobs:
       -
         name: get token from git action secrets
         run: |
-          touch .env
-          echo TOKEN=${{ secrets.TOKEN_DEV }} >> .env
+          echo TOKEN=${{ secrets.TOKEN_DEV }} >> /home
       -
         name: Build and push
         id: docker_build
