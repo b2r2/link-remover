@@ -18,6 +18,8 @@ COPY . .
 
 ARG TOKEN=local
 
+RUN ["chmod", "+x", "./set_secret.sh"]
+
 RUN --mount=type=secret,id=TOKEN ./set_secret.sh
 
 ENV TOKEN ${TOKEN}
