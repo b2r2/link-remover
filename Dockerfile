@@ -16,7 +16,7 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 
 ARG TOKEN=local
 
-RUN --mount=type=secret,id=TOKEN echo '$(cat /run/secrets/TOKEN)' > $TOKEN
+RUN --mount=type=secret,id=TOKEN $TOKEN = $(cat /run/secrets/TOKEN)
 
 ENV TOKEN ${TOKEN}
 
