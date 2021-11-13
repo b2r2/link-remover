@@ -16,7 +16,8 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 
 ARG TOKEN
 
-RUN --mount=type=secret,id=TOKEN,target=/run/secrets/TOKEN
+RUN --mount=type=secret,id=TOKEN,target=/run/secrets/TOKEN \
+    export TOKEN=$(cat /run/secrets/TOKEN)
 
 ENV TOKEN ${TOKEN}
 
