@@ -19,6 +19,8 @@ WORKDIR /usr/local/app
 ARG TOKEN
 COPY use_secret.sh .
 
+RUN ["chmod", "+x", "use_secret.sh"]
+
 RUN --mount=type=secret,id=TOKEN ./use_secret.sh
 
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
