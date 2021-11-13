@@ -17,8 +17,7 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 WORKDIR /usr/local/app
 
 RUN --mount=type=secret,id=TOKEN \
-    TOKEN="$(cat /run/secrets/TOKEN)" && \
-    export TOKEN
+    cat /run/secrets/TOKEN
 
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
