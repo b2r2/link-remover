@@ -17,7 +17,7 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 ARG TMP_TOKEN
 WORKDIR /usr/local/app
 
-RUN --mount=type=secret,id=TOKEN,target=/run/secrets/TOKEN && \
+RUN --mount=type=secret,id=TOKEN,target=/run/secrets/TOKEN \
     export TMP_TOKEN=$(cat /run/secrets/TOKEN) && \
     echo $TMP_TOKEN
 
