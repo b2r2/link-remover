@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.2
+# syntax=docker/dockerfile:1.3
 FROM golang:1.17.1-alpine3.14 as build
 
 RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g' /etc/apk/repositories && apk add git --no-cache
@@ -16,8 +16,10 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 
 WORKDIR /usr/local/app
 
-RUN --mount=type=secret,id=TOKEN \
-    cat /run/secrets/TOKEN
+ARG TOKEN
+COPY use_secret.sh .
+
+RUN --mount=type=secret,id=TOKEN ./use_secret.sh
 
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
