@@ -9,7 +9,7 @@ RUN go mod download
 COPY . .
 
 RUN --mount=type=secret,id=TOKEN \
-    go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go && \
+    go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
    
 COPY /run/secrets/TOKEN .
 
