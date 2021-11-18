@@ -1,18 +1,21 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/b2r2/link-remover/pkg"
 )
+
+const TOKEN = "TOKEN"
 
 type bot struct {
 	token string
 }
 
-func newBot() *bot {
-	fmt.Println("token", pkg.GetEnv("TOKEN", ""))
-	return &bot{
-		token: pkg.GetEnv("TOKEN", ""),
+func newBot() (*bot, error) {
+	token, err := pkg.GetEnv(TOKEN)
+	if err != nil {
+		return nil, err
 	}
+	return &bot{
+		token: token,
+	}, nil
 }

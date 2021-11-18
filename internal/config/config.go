@@ -7,10 +7,12 @@ type config struct {
 var conf *config
 
 func Load() error {
-	b := newBot()
+	b, err := newBot()
+	if err != nil {
+		return err
+	}
 
-	cfg := &config{bot: b}
-	conf = cfg
+	conf = &config{bot: b}
 
 	return nil
 }
