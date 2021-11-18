@@ -1,11 +1,19 @@
 package pkg
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
-func GetEnv(key string, defaultVal string) string {
+func GetEnv(key string) (string, error) {
 	if value, exists := os.LookupEnv(key); exists {
-		return value
+		return value, nil
 	}
 
-	return defaultVal
+	value, err := os.ReadFile(fmt.Sprintf("/run/secrets/%s", key))
+	if err != nil {
+		return "", err
+	}
+
+	return string(value), nil
 }
