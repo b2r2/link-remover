@@ -8,6 +8,8 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
+ARG TOKEN
+
 RUN --mount=type=secret,id=TOKEN \
     export TOKEN=$(cat /run/secrets/TOKEN) && go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
