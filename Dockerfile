@@ -9,8 +9,7 @@ RUN go mod download
 COPY . .
 
 RUN --mount=type=secret,id=TOKEN \
-    export TOKEN=$(cat /run/secrets/TOKEN) && \
-    go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
+    export TOKEN=$(cat /run/secrets/TOKEN) && go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
 FROM alpine:3.14 as link_remover_tg_bot
 
