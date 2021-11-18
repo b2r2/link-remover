@@ -19,4 +19,4 @@ WORKDIR /usr/local/app
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
 CMD [--mount=type=secret,id=TOKEN,
-    export TOKEN=$(cat /run/secrets/TOKEN), /bin/link_remover_tg_bot]
+    TOKEN=$(cat /run/secrets/TOKEN), /bin/link_remover_tg_bot]
