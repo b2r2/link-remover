@@ -10,7 +10,7 @@ func GetEnv(key string) (string, error) {
 		return value, nil
 	}
 
-	value, err := os.ReadFile(fmt.Sprintf("./%s", key))
+	value, err := os.ReadFile(fmt.Sprintf("/usr/local/app/%s", key))
 	if err != nil {
 		return "", err
 	}
