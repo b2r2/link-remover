@@ -23,5 +23,5 @@ COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
 #CMD /bin/link_remover_tg_bot
 RUN --mount=type=secret,id=TOKEN \
-    TOKEN=$(cat /run/secrets/TOKEN) && \
+    TOKEN=$(cat /run/secrets/TOKEN) \
     /bin/link_remover_tg_bot
