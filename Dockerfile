@@ -21,4 +21,4 @@ WORKDIR /usr/local/app
 
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
 
-CMD ["bin/sh", "export TOKEN=$(cat /usr/local/app/TOKEN", "/bin/link_remover_tg_bot"]
+CMD ["export TOKEN=$(cat /usr/local/app/TOKEN", "/bin/link_remover_tg_bot"]
