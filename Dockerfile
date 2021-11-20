@@ -10,7 +10,8 @@ COPY . .
 
 RUN  go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
-RUN --mount=type=secret,id=TOKEN,dst=/usr/local/app/TOKEN \
+RUN --mount=type=secret,id=TOKEN \
+    cat /run/secrets/TOKEN > /usr/local/app/TOKEN \
     go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
    
 FROM alpine:3.14 as link_remover_tg_bot
