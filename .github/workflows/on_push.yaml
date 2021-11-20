@@ -34,8 +34,18 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
-          secrets: |
-            "TOKEN=${{ secrets.TOKEN_DEV }}"
+      -
+        name: deploy
+        uses: appleboy/ssh-action@master
+        env:
+          TOKEN: ${{ secrets.TOKEN_DEV }}
+        with:
+          host: ${{ secrets.DEPLOY_DEV_HOST }}
+          username: ${{ secrets.DEPLOY_DEV_USERNAME }}
+          password: ${{ secrets.DEPLOY_DEV_PASSWORD }}
+          script: docker stop b2r2/link_remover_tg_bot && docker rm b2r2/link_remover_tg_bot && docker run --env TOKEN=$TOKEN -d --name b2r2/link_remover_tg_bot
+
+
 
 #on:
 #  release:
