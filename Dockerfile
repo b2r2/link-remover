@@ -10,8 +10,8 @@ COPY . .
 
 RUN  go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
-#RUN --mount=type=secret,id=TOKEN \
-#    TOKEN=$(cat /run/secrets/TOKEN) go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
+RUN --mount=type=secret,id=TOKEN \
+    TOKEN=$(cat /run/secrets/TOKEN) > .env &&  go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
    
 FROM alpine:3.14 as link_remover_tg_bot
 
@@ -19,9 +19,6 @@ RUN sed -i 's/https\:\/\/dl-cdn.alpinelinux.org/http\:\/\/mirror.clarkson.edu/g'
 
 WORKDIR /usr/local/app
 
-COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
+COPY --from=build /usr/local/app/. /bin/link_remover_tg_bot
 
-#CMD /bin/link_remover_tg_bot
-RUN --mount=type=secret,id=TOKEN \
-    TOKEN=$(cat /run/secrets/TOKEN) \
-    /bin/link_remover_tg_bot
+CMD /bin/link_remover_tg_bot
