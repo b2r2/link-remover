@@ -47,10 +47,10 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             whoami
-            docker kill $(docker ps -q)
-            docker rm ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}
-            docker run --env TOKEN=$TOKEN -d ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}:latest
-            docker system prune -f
+#            docker kill $(docker ps -q)
+#            docker rm ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}
+#            docker run --env TOKEN=$TOKEN -d ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}:latest
+#            docker system prune -f
 
 #on:
 #  release:
