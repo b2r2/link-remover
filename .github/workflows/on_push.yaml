@@ -49,7 +49,7 @@ jobs:
             docker stop b2r2/link_remover_tg_bot:latest
             docker rm b2r2/link_remover_tg_bot:latest
             docker system prune -f
-            docker run --env TOKEN=${{ secrets.TOKEN_DEV }} -d b2r2/link_remover_tg_bot:latest
+            docker run -d b2r2/link_remover_tg_bot:latest
 
 #on:
 #  release:
