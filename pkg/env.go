@@ -1,7 +1,10 @@
 package pkg
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -10,10 +13,25 @@ func GetEnv(key string) (string, error) {
 		return value, nil
 	}
 
-	value, err := os.ReadFile(fmt.Sprintf("/usr/local/app/%s", key))
+	var buf bytes.Buffer
+	f, err := os.Open(fmt.Sprintf("/usr/local/app/%s", key))
 	if err != nil {
 		return "", err
 	}
 
-	return string(value), nil
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Fatalln(err)
+		}
+	}()
+
+	n, err := buf.ReadFrom(f)
+	if err != nil {
+		return "", err
+	}
+	if n == 0 {
+		return "", errors.New("file has been empty")
+	}
+
+	return buf.String(), nil
 }

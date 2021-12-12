@@ -1,7 +1,10 @@
 package config
 
+import "github.com/sirupsen/logrus"
+
 type config struct {
-	bot *bot
+	bot    *bot
+	logger *logrus.Logger
 }
 
 var conf *config
@@ -12,7 +15,7 @@ func Load() error {
 		return err
 	}
 
-	conf = &config{bot: b}
+	conf = &config{bot: b, logger: logrus.New()}
 
 	return nil
 }
@@ -23,4 +26,8 @@ func Get() *config {
 
 func (c *config) GetToken() string {
 	return conf.bot.token
+}
+
+func (c *config) GetLogger() *logrus.Logger {
+	return conf.logger
 }

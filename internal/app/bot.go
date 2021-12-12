@@ -49,7 +49,6 @@ func New(log *logrus.Logger, t string) (*bot, error) {
 }
 
 func (b *bot) Start(ctx context.Context) {
-	go b.Remover(ctx)
 	b.bot.Handle(tele.OnText, func(c tele.Context) error {
 		b.checkMessage(c)
 		return nil
@@ -66,26 +65,27 @@ func (b *bot) Start(ctx context.Context) {
 }
 
 func (b *bot) Remover(ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case m := <-b.m:
-			if err := b.bot.Delete(&m.m); err != nil {
-				b.log.Errorln(err)
-			} else {
-				u := user{
-					removedAt: time.Now().String(),
-					url:       m.url,
-				}
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case m := <-b.m:
+				if err := b.bot.Delete(&m.m); err != nil {
+					b.log.Errorln(err)
+				} else {
+					u := user{
+						removedAt: time.Now().String(),
+						url:       m.url,
+					}
 
-				b.RLock()
-				b.log.Println(u)
-				b.removedLinks = append(b.removedLinks, u)
-				b.RUnlock()
+					b.RLock()
+					b.removedLinks = append(b.removedLinks, u)
+					b.RUnlock()
+				}
 			}
 		}
-	}
+	}()
 }
 
 func (b *bot) Stop() {
@@ -107,6 +107,8 @@ func (b *bot) checkMessage(c tele.Context) {
 				if _, err := url.ParseRequestURI(e.URL); err == nil {
 					b.push(m, e.URL)
 					break
+				} else {
+					b.log.Println(err)
 				}
 			}
 		}
