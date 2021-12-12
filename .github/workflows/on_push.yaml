@@ -46,9 +46,6 @@ jobs:
           password: ${{ secrets.DEPLOY_DEV_PASSWORD }}
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
-            sudo groupadd docker
-            sudo usermod -aG docker ${USER}
-            su -s ${USER}
             docker stop ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}:latest
             docker rm ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}:latest
             docker run --env TOKEN=$TOKEN -d ${{ secrets.DOCKER_LOGIN }}/{{ secrets.DOCKER_NAME }}:latest
