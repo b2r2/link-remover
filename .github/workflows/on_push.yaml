@@ -49,7 +49,7 @@ jobs:
             docker stop ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME}}:latest
             docker rm ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME}}:latest
             docker system prune -f
-            docker run --env TOKEN=$TOKEN -d ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME}}:latest
+            docker run --env TOKEN=${{ secrets.TOKEN_DEV }} -d ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME}}:latest
 
 #on:
 #  release:
