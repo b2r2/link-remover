@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	"mvdan.cc/xurls/v2"
 
@@ -98,6 +99,13 @@ func (b *bot) Stop() {
 
 func (b *bot) checkMessage(c tele.Context) {
 	m := c.Message()
+
+	m.Text = strings.ToLower(strings.TrimFunc(c.Message().Text, func(r rune) bool {
+		if unicode.IsSpace(r) || unicode.IsMark(r) {
+			return true
+		}
+		return false
+	}))
 	if m.Chat.Username != domain || m.ReplyTo.Chat.Username != domain {
 		if len(b.rg.FindAllString(m.Text, -1)) > 0 {
 			b.push(m, m.Text)
