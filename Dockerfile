@@ -20,7 +20,7 @@ WORKDIR /usr/local/app
 ARG TOKEN
 ENV TOKEN=$TOKEN
 
-RUN --mount=type=secret,id=API_ENDPOINT \
+RUN --mount=type=secret,id=TOKEN \
     export API_ENDPOINT=$(cat /run/secrets/TOKEN) && \
     echo $TOKEN >> .env
 
