@@ -37,5 +37,7 @@ func GetEnv(key string) (string, error) {
 		return "", errors.New("file has been empty")
 	}
 
+	log.Println("N, buf", n, buf.String())
+
 	return buf.String(), nil
 }
