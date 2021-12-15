@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 func GetEnv(key string) (string, error) {
@@ -13,15 +14,12 @@ func GetEnv(key string) (string, error) {
 		return value, nil
 	}
 
-	log.Println(1)
-
 	var buf bytes.Buffer
 	f, err := os.Open(fmt.Sprintf("/usr/local/app/%s", key))
 	if err != nil {
 		log.Println(3)
 		return "", err
 	}
-	log.Println(2)
 
 	defer func() {
 		if err := f.Close(); err != nil {
@@ -37,7 +35,5 @@ func GetEnv(key string) (string, error) {
 		return "", errors.New("file has been empty")
 	}
 
-	log.Println("N, buf", n, buf.String())
-
-	return buf.String(), nil
+	return strings.Trim(buf.String(), "\n"), nil
 }
