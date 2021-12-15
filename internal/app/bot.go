@@ -101,7 +101,7 @@ func (b *bot) checkMessage(c tele.Context) {
 	m := c.Message()
 
 	m.Text = strings.ToLower(strings.TrimFunc(c.Message().Text, func(r rune) bool {
-		if unicode.IsSpace(r) || unicode.IsMark(r) {
+		if !unicode.IsSpace(r) || !unicode.IsMark(r) {
 			return true
 		}
 		return false
