@@ -49,7 +49,7 @@ jobs:
             docker stop b2r2/link_remover_tg_bot:latest
             docker rm b2r2/link_remover_tg_bot:latest
             docker system prune -f
-            docker run -d ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
+            docker run --env-file .env -d ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
 
 #on:
 #  release:
