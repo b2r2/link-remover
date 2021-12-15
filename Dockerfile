@@ -8,6 +8,9 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 
+ARG TOKEN
+ENV TOKEN=$TOKEN
+
 RUN go build -ldflags "-s -w" -o link_remover_tg_bot ./cmd/main.go
 
 
