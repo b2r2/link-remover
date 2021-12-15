@@ -1,6 +1,8 @@
 package config
 
 import (
+	"log"
+
 	"github.com/b2r2/link-remover/pkg"
 )
 
@@ -12,6 +14,7 @@ type bot struct {
 
 func newBot() (*bot, error) {
 	token, err := pkg.GetEnv(TOKEN)
+	log.Println("TOKEN", token)
 	if err != nil {
 		return nil, err
 	}
