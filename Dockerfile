@@ -21,7 +21,7 @@ ARG TOKEN
 ENV TOKEN=$TOKEN
 
 RUN --mount=type=secret,id=TOKEN \
-    export API_ENDPOINT=$(cat /run/secrets/TOKEN) && \
+    export TOKEN=$(cat /run/secrets/TOKEN) && \
     echo $TOKEN >> .env
 
 COPY --from=build /usr/local/app/link_remover_tg_bot /bin/link_remover_tg_bot
