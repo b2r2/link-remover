@@ -13,11 +13,15 @@ func GetEnv(key string) (string, error) {
 		return value, nil
 	}
 
+	log.Println(1)
+
 	var buf bytes.Buffer
 	f, err := os.Open(fmt.Sprintf("/usr/local/app/%s", key))
 	if err != nil {
+		log.Println(3)
 		return "", err
 	}
+	log.Println(2)
 
 	defer func() {
 		if err := f.Close(); err != nil {
