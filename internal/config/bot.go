@@ -4,7 +4,7 @@ import (
 	"github.com/b2r2/link-remover/pkg"
 )
 
-const TOKEN = "TOKEN"
+const TOKEN = ".env"
 
 type bot struct {
 	token string
