@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"log"
 	"net/url"
 	"regexp"
 	"strings"
@@ -92,12 +93,12 @@ func (b *bot) Remover(ctx context.Context) {
 func (b *bot) Stop() {
 	b.bot.Stop()
 	b.Lock()
-	b.pushLogsOnAdmin(b.removedLinks)
+	b.dumpLogs(b.removedLinks)
 	close(b.m)
 	b.Unlock()
 }
 
-func (b *bot) pushLogsOnAdmin(u []user) {
+func (b *bot) dumpLogs(u []user) {
 	var removedLinks = struct {
 		links []user
 		count int
@@ -105,9 +106,10 @@ func (b *bot) pushLogsOnAdmin(u []user) {
 		links: u,
 		count: len(u),
 	}
-	if _, err := b.bot.Send(&tele.Chat{ID: 237426682}, removedLinks); err != nil {
-		b.log.Fatal(err)
-	}
+
+	log.Println("total count:", removedLinks.count)
+	log.Println("removed links:", removedLinks.links)
+
 }
 
 func (b *bot) checkMessage(c tele.Context) {
