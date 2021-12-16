@@ -92,8 +92,8 @@ func (b *bot) Remover(ctx context.Context) {
 func (b *bot) Stop() {
 	b.bot.Stop()
 	b.Lock()
-	close(b.m)
 	b.pushLogsOnAdmin(b.removedLinks)
+	close(b.m)
 	b.Unlock()
 }
 
