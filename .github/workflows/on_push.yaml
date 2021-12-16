@@ -45,7 +45,6 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             docker stop dev
-            docker kill ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
             docker rm dev
             docker system prune -f
             docker run -d --name dev ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
