@@ -34,7 +34,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
           secrets: |
-            "TOKEN=${{ secrets.TOKEN_DEV }}"
+            "TOKEN=${{ secrets.TOKEN_PROD }}"
       -
         name: Deploy
         uses: appleboy/ssh-action@master
