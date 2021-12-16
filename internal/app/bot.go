@@ -44,6 +44,7 @@ func New(log *logrus.Logger, t string) (*bot, error) {
 }
 
 func (b *bot) Start(ctx context.Context) {
+	b.log.Println("start bot[", b.bot.Token, "]")
 	b.bot.Handle(tele.OnText, func(c tele.Context) error {
 		b.checkMessage(c)
 		return nil
@@ -129,7 +130,6 @@ func handleText(s string) string {
 			continue
 		}
 		_, _ = buf.WriteRune(r)
-
 	}
 
 	return buf.String()
