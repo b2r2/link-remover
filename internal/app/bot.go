@@ -20,13 +20,7 @@ type bot struct {
 	bot *tele.Bot
 	rg  *regexp.Regexp
 	sync.RWMutex
-	m            chan message
-	removedLinks []user
-}
-
-type user struct {
-	removedAt string
-	url       string
+	m chan message
 }
 
 type message struct {
@@ -46,7 +40,7 @@ func New(log *logrus.Logger, t string) (*bot, error) {
 		return nil, err
 	}
 
-	return &bot{bot: b, log: log, m: make(chan message, 100), rg: xurls.Relaxed(), removedLinks: make([]user, 0, 10_000)}, nil
+	return &bot{bot: b, log: log, m: make(chan message, 100), rg: xurls.Relaxed()}, nil
 }
 
 func (b *bot) Start(ctx context.Context) {
@@ -74,15 +68,6 @@ func (b *bot) Remover(ctx context.Context) {
 			case m := <-b.m:
 				if err := b.bot.Delete(&m.m); err != nil {
 					b.log.Errorln(err)
-				} else {
-					u := user{
-						removedAt: time.Now().String(),
-						url:       m.url,
-					}
-
-					b.RLock()
-					b.removedLinks = append(b.removedLinks, u)
-					b.RUnlock()
 				}
 			}
 		}
@@ -92,23 +77,8 @@ func (b *bot) Remover(ctx context.Context) {
 func (b *bot) Stop() {
 	b.bot.Stop()
 	b.Lock()
-	b.dumpLogs(b.removedLinks)
 	close(b.m)
 	b.Unlock()
-}
-
-func (b *bot) dumpLogs(u []user) {
-	var removedLinks = struct {
-		links []user
-		count int
-	}{
-		links: u,
-		count: len(u),
-	}
-
-	b.log.Println("total count:", removedLinks.count)
-	b.log.Println("removed links:", removedLinks.links)
-
 }
 
 func (b *bot) checkMessage(c tele.Context) {
