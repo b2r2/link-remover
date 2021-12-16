@@ -3,7 +3,6 @@ package app
 import (
 	"bytes"
 	"context"
-	"log"
 	"net/url"
 	"regexp"
 	"strings"
@@ -107,8 +106,8 @@ func (b *bot) dumpLogs(u []user) {
 		count: len(u),
 	}
 
-	log.Println("total count:", removedLinks.count)
-	log.Println("removed links:", removedLinks.links)
+	b.log.Println("total count:", removedLinks.count)
+	b.log.Println("removed links:", removedLinks.links)
 
 }
 
