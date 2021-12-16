@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"net/url"
 	"regexp"
@@ -19,13 +20,7 @@ type bot struct {
 	bot *tele.Bot
 	rg  *regexp.Regexp
 	sync.RWMutex
-	m            chan message
-	removedLinks []user
-}
-
-type user struct {
-	removedAt string
-	url       string
+	m chan message
 }
 
 type message struct {
@@ -45,11 +40,10 @@ func New(log *logrus.Logger, t string) (*bot, error) {
 		return nil, err
 	}
 
-	return &bot{bot: b, log: log, m: make(chan message, 100), rg: xurls.Relaxed(), removedLinks: make([]user, 0, 10_000)}, nil
+	return &bot{bot: b, log: log, m: make(chan message, 100), rg: xurls.Relaxed()}, nil
 }
 
 func (b *bot) Start(ctx context.Context) {
-	go b.Remover(ctx)
 	b.bot.Handle(tele.OnText, func(c tele.Context) error {
 		b.checkMessage(c)
 		return nil
@@ -66,40 +60,34 @@ func (b *bot) Start(ctx context.Context) {
 }
 
 func (b *bot) Remover(ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case m := <-b.m:
-			if err := b.bot.Delete(&m.m); err != nil {
-				b.log.Errorln(err)
-			} else {
-				u := user{
-					removedAt: time.Now().String(),
-					url:       m.url,
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case m := <-b.m:
+				if err := b.bot.Delete(&m.m); err != nil {
+					b.log.Errorln(err)
 				}
-
-				b.RLock()
-				b.log.Println(u)
-				b.removedLinks = append(b.removedLinks, u)
-				b.RUnlock()
 			}
 		}
-	}
+	}()
 }
 
 func (b *bot) Stop() {
 	b.bot.Stop()
 	b.Lock()
 	close(b.m)
-	b.log.Println(b.removedLinks)
 	b.Unlock()
 }
 
 func (b *bot) checkMessage(c tele.Context) {
 	m := c.Message()
+
+	text := handleText(m.Text)
+
 	if m.Chat.Username != domain || m.ReplyTo.Chat.Username != domain {
-		if len(b.rg.FindAllString(m.Text, -1)) > 0 {
+		if len(b.rg.FindAllString(text, -1)) > 0 {
 			b.push(m, m.Text)
 		}
 		if len(m.Entities) > 0 {
@@ -107,10 +95,12 @@ func (b *bot) checkMessage(c tele.Context) {
 				if _, err := url.ParseRequestURI(e.URL); err == nil {
 					b.push(m, e.URL)
 					break
+				} else {
+					b.log.Println(err)
 				}
 			}
 		}
-		if strings.Contains(m.Text, "@") {
+		if strings.Contains(text, "@") {
 			b.push(m, m.Text)
 		}
 	}
@@ -121,4 +111,26 @@ func (b *bot) push(m *tele.Message, url string) {
 	msg.m = *m
 	msg.url = url
 	b.m <- msg
+}
+
+func handleText(s string) string {
+	selectASCII := func(r int32) bool {
+		switch r {
+		case 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 58, 59, 60, 61, 62, 63, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126:
+			return true
+		default:
+			return false
+		}
+	}
+	var buf bytes.Buffer
+
+	for _, r := range s {
+		if selectASCII(r) {
+			continue
+		}
+		_, _ = buf.WriteRune(r)
+
+	}
+
+	return buf.String()
 }

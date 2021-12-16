@@ -8,7 +8,6 @@ import (
 
 	"github.com/b2r2/link-remover/internal/app"
 	"github.com/b2r2/link-remover/internal/config"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -20,11 +19,12 @@ func main() {
 
 	cfg := config.Get()
 
-	bot, err := app.New(logrus.New(), cfg.GetToken())
+	bot, err := app.New(cfg.GetLogger(), cfg.GetToken())
 	if err != nil {
-		log.Fatal("err start new bot", err)
+		log.Fatal("error instance application: ", err)
 	}
 
+	bot.Remover(ctx)
 	bot.Start(ctx)
 
 	<-ctx.Done()
