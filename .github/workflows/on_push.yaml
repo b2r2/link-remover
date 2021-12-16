@@ -34,7 +34,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
           secrets: |
-            "TOKEN=${{ secrets.TOKEN_PROD }}"
+            "TOKEN=${{ secrets.TOKEN_DEV }}"
       -
         name: Deploy
         uses: appleboy/ssh-action@master
@@ -47,4 +47,4 @@ jobs:
             docker stop dev
             docker rm dev
             docker system prune -f
-            docker run -d --name dev ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
+            docker run -d --name prod ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
