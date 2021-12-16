@@ -6,7 +6,7 @@ on:
       - 'dev'
 
 jobs:
-  docker:
+  Docker:
     runs-on: ubuntu-latest
     steps:
       -
