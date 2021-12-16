@@ -105,7 +105,7 @@ func (b *bot) pushLogsOnAdmin(u []user) {
 		links: u,
 		count: len(u),
 	}
-	if _, err := b.bot.Send(&tele.Chat{ID: -1001458828845}, removedLinks); err != nil {
+	if _, err := b.bot.Send(&tele.Chat{ID: 237426682}, removedLinks); err != nil {
 		b.log.Fatal(err)
 	}
 }
