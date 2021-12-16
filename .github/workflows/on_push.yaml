@@ -45,9 +45,9 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             docker kill ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
-            docker rm ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
+            docker rm dev
             docker system prune -f
-            docker run -d -t ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest --name dev
+            docker run -d --name dev ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
 
 #on:
 #  release:
