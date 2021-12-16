@@ -47,7 +47,7 @@ jobs:
             docker container stop ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
             docker rm ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
             docker system prune -f
-            docker run -d ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
+            docker run -d --name ${{ secrets.DOCKER_LOGIN}}/${{ secrets.DOCKER_NAME }}:latest
 
 #on:
 #  release:

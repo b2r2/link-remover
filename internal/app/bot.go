@@ -132,7 +132,7 @@ func (b *bot) push(m *tele.Message, url string) {
 func handleText(s string) string {
 	selectASCII := func(r int32) bool {
 		switch r {
-		case 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 58, 59, 60, 61, 62, 63, 64, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126:
+		case 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 58, 59, 60, 61, 62, 63, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126:
 			return true
 		default:
 			return false
