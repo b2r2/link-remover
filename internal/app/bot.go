@@ -93,8 +93,21 @@ func (b *bot) Stop() {
 	b.bot.Stop()
 	b.Lock()
 	close(b.m)
-	b.log.Println(b.removedLinks)
+	b.pushLogsOnAdmin(b.removedLinks)
 	b.Unlock()
+}
+
+func (b *bot) pushLogsOnAdmin(u []user) {
+	var removedLinks = struct {
+		links []user
+		count int
+	}{
+		links: u,
+		count: len(u),
+	}
+	if _, err := b.bot.Send(&tele.Chat{ID: -1001458828845}, removedLinks); err != nil {
+		b.log.Fatal(err)
+	}
 }
 
 func (b *bot) checkMessage(c tele.Context) {
