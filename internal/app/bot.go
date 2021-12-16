@@ -1,13 +1,13 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"net/url"
 	"regexp"
 	"strings"
 	"sync"
 	"time"
-	"unicode"
 
 	"mvdan.cc/xurls/v2"
 
@@ -100,14 +100,10 @@ func (b *bot) Stop() {
 func (b *bot) checkMessage(c tele.Context) {
 	m := c.Message()
 
-	m.Text = strings.ToLower(strings.TrimFunc(c.Message().Text, func(r rune) bool {
-		if !unicode.IsSpace(r) || !unicode.IsMark(r) {
-			return true
-		}
-		return false
-	}))
+	text := handleText(m.Text)
+
 	if m.Chat.Username != domain || m.ReplyTo.Chat.Username != domain {
-		if len(b.rg.FindAllString(m.Text, -1)) > 0 {
+		if len(b.rg.FindAllString(text, -1)) > 0 {
 			b.push(m, m.Text)
 		}
 		if len(m.Entities) > 0 {
@@ -120,7 +116,7 @@ func (b *bot) checkMessage(c tele.Context) {
 				}
 			}
 		}
-		if strings.Contains(m.Text, "@") {
+		if strings.Contains(text, "@") {
 			b.push(m, m.Text)
 		}
 	}
@@ -131,4 +127,26 @@ func (b *bot) push(m *tele.Message, url string) {
 	msg.m = *m
 	msg.url = url
 	b.m <- msg
+}
+
+func handleText(s string) string {
+	selectASCII := func(r int32) bool {
+		switch r {
+		case 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 58, 59, 60, 61, 62, 63, 64, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126:
+			return true
+		default:
+			return false
+		}
+	}
+	var buf bytes.Buffer
+
+	for _, r := range s {
+		if selectASCII(r) {
+			continue
+		}
+		_, _ = buf.WriteRune(r)
+
+	}
+
+	return buf.String()
 }
