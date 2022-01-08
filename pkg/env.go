@@ -17,7 +17,6 @@ func GetEnv(key string) (string, error) {
 	var buf bytes.Buffer
 	f, err := os.Open(fmt.Sprintf("/usr/local/app/%s", key))
 	if err != nil {
-		log.Println(3)
 		return "", err
 	}
 
